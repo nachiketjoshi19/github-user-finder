@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
+import axios from 'axios';
+import Profile from './components/Profile';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const API = 'https://api.github.com/users/';
+
+const App = () => {
+  const [items, setItems] = useState([]);
+  const [search, setSearch] = useState('');
+  useEffect(() => {
+    const fetchItems = async () => {
+      if (search) {
+        const result = await axios.get(`${API}${search}`);
+        console.log(result.data);
+        setItems(result.data);
+      } else {
+        const result = await axios.get(`${API}nachiketjoshi19`);
+        console.log(result.data);
+        setItems(result.data);
+      }
+    };
+    fetchItems();
+    console.log(search);
+  }, [search]);
+
+  return <Profile getSearch={(s) => setSearch(s)} items={items} />;
+};
 
 export default App;
